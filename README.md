@@ -7,8 +7,12 @@
   * Which nees an image manipulation library, usually [the PIL fork pillow][gpil]
 * For more functionality I will probably be using [pyperclip][gpyper] and [pyautogui][gpyaut]
 
+## Documentation
+* [Readthedocs Python Elgato Stream Deck][rtdsd]
+
 
 [pesdl]: https://github.com/abcminiuser/python-elgato-streamdeck
 [gpil]: https://github.com/python-pillow/Pillow
 [gpyper]: https://github.com/asweigart/pyperclip
 [gpyaut]: https://github.com/asweigart/pyautogui
+[rtdsd]: https://python-elgato-streamdeck.readthedocs.io/en/stable/
