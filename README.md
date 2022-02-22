@@ -9,6 +9,17 @@
 
 ## Documentation
 * [Readthedocs Python Elgato Stream Deck][rtdsd]
+* [Using a Stream Deck for productivity - a software developers solution][jrsd] by [James Ridgway][jruk]
+
+## Basic Concepts
+Within DevDeck there are two main concepts: Control and Deck.
+
+A control is used to perform an action when a given key is pressed. A control represents the most basic element that can be displayed in a Stream Deck.
+
+A deck is indented to deal with either of the following scenarios:
+
+Needing to display more controls than the device has physical keys for, or,
+Showing a subset of relevant controls.
 
 
 [pesdl]: https://github.com/abcminiuser/python-elgato-streamdeck
@@ -16,3 +27,5 @@
 [gpyper]: https://github.com/asweigart/pyperclip
 [gpyaut]: https://github.com/asweigart/pyautogui
 [rtdsd]: https://python-elgato-streamdeck.readthedocs.io/en/stable/
+[jruk]: https://www.jamesridgway.co.uk
+[jrsd]: https://www.jamesridgway.co.uk/using-a-stream-deck-for-productivity-a-software-developers-solution/
