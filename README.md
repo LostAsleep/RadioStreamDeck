@@ -12,7 +12,7 @@
 * [Using a Stream Deck for productivity - a software developers solution][jrsd] by [James Ridgway][jruk]
 
 ## Basic Concepts
-*Taken from James Ridgway's article.*
+*Taken from James Ridgway's article. This is for his devdeck implementation, but I think it's also true for the python-elgato-streamdeck library.*
 
 * Each physical button is a **key**
 * A **control** is used to perform an action when a given key is pressed. A **control** represents the most basic element that can be displayed in a Stream Deck.
@@ -28,3 +28,4 @@
 [rtdsd]: https://python-elgato-streamdeck.readthedocs.io/en/stable/
 [jruk]: https://www.jamesridgway.co.uk
 [jrsd]: https://www.jamesridgway.co.uk/using-a-stream-deck-for-productivity-a-software-developers-solution/
+[devd]: https://github.com/jamesridgway/devdeck
