@@ -11,6 +11,7 @@
 # tiles generated at runtime, and responding to button state change events.
 
 import os
+import sys
 import threading
 
 from PIL import Image, ImageDraw, ImageFont
@@ -39,8 +40,15 @@ def render_key_image(deck, icon_filename, font_filename, label_text):
     return PILHelper.to_native_format(deck, image)
 
 
-# Returns styling information for a key based on its position and state.
 def get_key_style(deck, key, state):
+    """
+    Returns styling information for a key based on its position and state.
+
+    :param deck: A :class:`StreamDeck` instance.
+    :param key: int
+    :param state: bool
+    :return: list of :str:
+    """
     # Last button in the example application is the exit button.
     exit_key_index = deck.key_count() - 1
 
@@ -63,9 +71,15 @@ def get_key_style(deck, key, state):
     }
 
 
-# Creates a new key image based on the key index, style and current key state
-# and updates the image on the StreamDeck.
 def update_key_image(deck, key, state):
+    """
+    Creates a new key image based on the key index, style and current key state
+    and updates the image on the StreamDeck.
+
+    :param deck: A :class:`StreamDeck` instance.
+    :param key: int
+    :param state: bool
+    """
     # Determine what icon and label to use on the generated key.
     key_style = get_key_style(deck, key, state)
 
@@ -79,56 +93,82 @@ def update_key_image(deck, key, state):
         deck.set_key_image(key, image)
 
 
-# Prints key state change information, updates rhe key image and performs any
-# associated actions when a key is pressed.
 def key_change_callback(deck, key, state):
-    # Print new key state
-    print("Deck {} Key {} = {}".format(deck.id(), key, state), flush=True)
+    """
+    Prints key state change information, updates the key image and
+    performs any associated actions when a key is pressed.
 
-    # Update the key image based on the new key state.
-    update_key_image(deck, key, state)
+    :param deck: A :class:`StreamDeck` instance.
+    :param key: int
+    :param state: bool
+    """
+    print(f"Deck {deck.id()} Key {key} = {state}", flush=True)  # Print new key state
 
-    # Check if the key is changing to the pressed state.
-    if state:
-        key_style = get_key_style(deck, key, state)
+    update_key_image(deck, key, state)  # Update the key image based on the new key state.
+    key_pressed = state  # Just because if think it's a bit easier to read.
 
-        # When an exit button is pressed, close the application.
-        if key_style["name"] == "exit":
-            # Use a scoped-with on the deck to ensure we're the only thread
-            # using it right now.
-            with deck:
-                # Reset deck, clearing all button images.
-                deck.reset()
+    if key_pressed and get_key_style(deck, key, key_pressed)["name"] == "exit":
+        # Use a scoped-with on the deck to ensure we're the only thread using it right now.
+        with deck:
+            deck.reset()  # Reset deck, clearing all button images.
+            deck.close()  # Close deck handle, terminating internal worker threads.
+    elif key_pressed:
+        key_style = get_key_style(deck, key, key_pressed)
+        pass  # No key functions as of right now
 
-                # Close deck handle, terminating internal worker threads.
-                deck.close()
+
+def get_stream_deck():
+    """
+    Uses the DeviceManager to detect all connected Stream Decks.
+
+    Will return the first or only Stream Deck for usage. If no Stream Deck is found abort program.
+
+    :return: One :class:`StreamDeck` instance.
+    """
+    all_streamdecks = DeviceManager().enumerate()
+    number_of_streamdecks = len(all_streamdecks)
+    print(f"Found {number_of_streamdecks} Stream Deck(s).")
+
+    if number_of_streamdecks < 1:
+        sys.exit("No Stream Decks found, aborting...")
+    if number_of_streamdecks == 1:
+        print("Using the detected Stream Deck.")
+    elif number_of_streamdecks > 1:
+        print(f"Using the first of the {number_of_streamdecks} found Stream Decks.")
+
+    return all_streamdecks[0]
+
+
+def main():
+    """
+    The main function. Initializes the stream deck and keys.
+    """
+    stream_deck = get_stream_deck()
+    stream_deck.open()
+    stream_deck.reset()  # Reset deck, clearing all button images.
+
+    deck_type = stream_deck.deck_type()
+    deck_serial_number = stream_deck.get_serial_number()
+    print(f"Opened '{deck_type}' device (serial number: '{deck_serial_number}')")
+
+    # Set initial screen brightness to 30%.
+    stream_deck.set_brightness(30)
+
+    # Set initial key images.
+    for key in range(stream_deck.key_count()):
+        update_key_image(stream_deck, key, False)
+
+    # Register callback function for when a key state changes.
+    stream_deck.set_key_callback(key_change_callback)
+
+    # Wait until all application threads have terminated.
+    # Here this is when all deck handles are closed. (Not sure if needed for only one deck)
+    for t in threading.enumerate():
+        try:
+            t.join()
+        except RuntimeError:
+            pass
 
 
 if __name__ == "__main__":
-    streamdecks = DeviceManager().enumerate()
-
-    print("Found {} Stream Deck(s).\n".format(len(streamdecks)))
-
-    for index, deck in enumerate(streamdecks):
-        deck.open()
-        deck.reset()
-
-        print("Opened '{}' device (serial number: '{}')".format(deck.deck_type(), deck.get_serial_number()))
-
-        # Set initial screen brightness to 30%.
-        deck.set_brightness(30)
-
-        # Set initial key images.
-        for key in range(deck.key_count()):
-            update_key_image(deck, key, False)
-
-        # Register callback function for when a key state changes.
-        deck.set_key_callback(key_change_callback)
-
-        # Wait until all application threads have terminated (for this example,
-        # this is when all deck handles are closed).
-        for t in threading.enumerate():
-            try:
-                t.join()
-            except RuntimeError:
-                pass
+    main()
