@@ -12,7 +12,7 @@ current_directory
    | - Exit.png
    | - Pressed.png
    | - Released.png
-
+   | - ...
 """
 
 import PyInstaller.__main__
