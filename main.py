@@ -1,15 +1,5 @@
 #!/usr/bin/env python3
 
-#         Python Stream Deck Library
-#      Released under the MIT license
-#
-#   dean [at] fourwalledcubicle [dot] com
-#         www.fourwalledcubicle.com
-#
-
-# Example script showing basic library usage - updating key images with new
-# tiles generated at runtime, and responding to button state change events.
-
 import os
 import sys
 import threading
@@ -18,16 +8,23 @@ from PIL import Image, ImageDraw, ImageFont
 from StreamDeck.DeviceManager import DeviceManager
 from StreamDeck.ImageHelpers import PILHelper
 
-# Folder location of image assets used by this example.
+# Folder location of image assets.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
 
 
-# Generates a custom tile with run-time generated text and custom image via the
-# PIL module.
 def render_key_image(deck, icon_filename, font_filename, label_text):
-    # Resize the source image asset to best-fit the dimensions of a single key,
-    # leaving a margin at the bottom so that we can draw the key title
-    # afterwards.
+    """
+    Generates a custom tile with run-time generated text and custom image via
+    the PIL module.
+
+    Resize the source image asset to best-fit the dimensions of a single key,
+    leaving a margin at the bottom so that we can draw the key title afterwards.
+
+    :param deck: A :class:`StreamDeck` instance.
+    :param icon_filename: str
+    :param font_filename: str
+    :param label_text: str
+    """
     icon = Image.open(icon_filename)
     image = PILHelper.create_scaled_image(deck, icon, margins=[0, 0, 20, 0])
 
@@ -59,9 +56,9 @@ def get_key_style(deck, key, state):
         label = "Bye" if state else "Exit"
     else:
         name = "emoji"
-        icon = "{}.png".format("Pressed" if state else "Released")
+        icon = "Pressed.png" if state else "Released.png"
         font = "Roboto-Regular.ttf"
-        label = "Pressed!" if state else "Key {}".format(key)
+        label = "Pressed!" if state else f"Key {key}"
 
     return {
         "name": name,
@@ -121,7 +118,8 @@ def get_stream_deck():
     """
     Uses the DeviceManager to detect all connected Stream Decks.
 
-    Will return the first or only Stream Deck for usage. If no Stream Deck is found abort program.
+    Will return the first or only Stream Deck for usage.
+    If no Stream Deck is found abort program.
 
     :return: One :class:`StreamDeck` instance.
     """
