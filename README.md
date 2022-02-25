@@ -1,4 +1,7 @@
 # RadioStreamDeck
+
+*Requires Python Version >= 3.10 because I plan to use match case statements.*
+
 * My try to use / adapt the Stream Deck for the daily needs of a radiologist.
 * This has to work on a Windows 10 64bit machine without root access.
 * The Stream Deck needs an usb driver to work properly. Windows needs the `hidapi.dll` DLL. 
