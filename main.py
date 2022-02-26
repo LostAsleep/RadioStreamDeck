@@ -32,7 +32,13 @@ def render_key_image(deck, icon_filename, font_filename, label_text):
     # label onto the image a few pixels from the bottom of the key.
     draw = ImageDraw.Draw(image)
     font = ImageFont.truetype(font_filename, 14)
-    draw.text((image.width / 2, image.height - 5), text=label_text, font=font, anchor="ms", fill="white")
+    draw.text(
+        (image.width / 2, image.height - 5),
+        text=label_text,
+        font=font,
+        anchor="ms",
+        fill="white",
+    )
 
     return PILHelper.to_native_format(deck, image)
 
@@ -64,7 +70,7 @@ def get_key_style(deck, key, state):
         "name": name,
         "icon": os.path.join(ASSETS_PATH, icon),
         "font": os.path.join(ASSETS_PATH, font),
-        "label": label
+        "label": label,
     }
 
 
@@ -81,7 +87,9 @@ def update_key_image(deck, key, state):
     key_style = get_key_style(deck, key, state)
 
     # Generate the custom key with the requested image and label.
-    image = render_key_image(deck, key_style["icon"], key_style["font"], key_style["label"])
+    image = render_key_image(
+        deck, key_style["icon"], key_style["font"], key_style["label"]
+    )
 
     # Use a scoped-with on the deck to ensure we're the only thread using it
     # right now.
@@ -101,7 +109,8 @@ def key_change_callback(deck, key, state):
     """
     print(f"Deck {deck.id()} Key {key} = {state}", flush=True)  # Print new key state
 
-    update_key_image(deck, key, state)  # Update the key image based on the new key state.
+    # Update the key image based on the new key state.
+    update_key_image(deck, key, state)
     key_pressed = state  # Just because if think it's a bit easier to read.
 
     if key_pressed and get_key_style(deck, key, key_pressed)["name"] == "exit":
