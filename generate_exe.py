@@ -7,6 +7,7 @@ current_directory
  | - hidapi.dll
  | - hidapi.lib
  | - hidapi.pdb
+ | - README.md
  | - Assets
    | - Roboto-Regular.ttf
    | - Exit.png
@@ -25,6 +26,7 @@ PyInstaller.__main__.run([
     '--add-binary=hidapi.dll;.',
     '--add-binary=hidapi.lib;.',
     '--add-binary=hidapi.pdb;.',
+    '--add-data=README.md;.',
     '--add-data=Assets;Assets',
     # '--noconsole'  # For final version
 ])
