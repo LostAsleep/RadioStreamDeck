@@ -26,5 +26,5 @@ PyInstaller.__main__.run([
     '--add-binary=hidapi.lib;.',
     '--add-binary=hidapi.pdb;.',
     '--add-data=Assets;Assets',
-    #'--noconsole'  # For final version
+    # '--noconsole'  # For final version
 ])
