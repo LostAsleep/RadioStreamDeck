@@ -162,10 +162,17 @@ def key_change_callback(deck, key, state):
         with deck:
             deck.reset()  # Reset deck, clearing all button images.
             deck.close()  # Close deck handle, terminating internal worker threads.
-    elif key_pressed and key in KEY_COMBS:  # Only try to use the hotkey if it's actually defined.
+
+    # Only try to use the hotkey if it's actually defined.
+    elif key_pressed and key in KEY_COMBS:
         # key_style = get_key_style(deck, key, key_pressed)  # Probably unnecessary
         # print(KEY_COMBS[key][1][0], KEY_COMBS[key][1][1], KEY_COMBS[key][1][2], KEY_COMBS[key][1][3])
-        pyautogui.hotkey(KEY_COMBS[key][1][0], KEY_COMBS[key][1][1], KEY_COMBS[key][1][2], KEY_COMBS[key][1][3])
+        pyautogui.hotkey(
+            KEY_COMBS[key][1][0],
+            KEY_COMBS[key][1][1],
+            KEY_COMBS[key][1][2],
+            KEY_COMBS[key][1][3],
+        )
 
 
 def get_stream_deck():
