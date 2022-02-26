@@ -97,15 +97,18 @@ def get_key_style(deck, key, state):
         icon = "{}.png".format("Exit")
         font = "Roboto-Regular.ttf"
         label = "Bye" if state else "Exit"
-    else:
-        # name = "emoji"
-        # icon = "Pressed.png" if state else "Released.png"
-        # font = "Roboto-Regular.ttf"
-        # label = "Pressed!" if state else f"Key {key}"
+
+    elif key in KEY_COMBS:
         name = KEY_COMBS[key][0]
         icon = "Pressed.png" if state else "Released.png"
         font = "Roboto-Regular.ttf"
         label = "Pressed!" if state else KEY_COMBS[key][0]
+
+    else:
+        name = "emoji"
+        icon = "Pressed.png" if state else "Released.png"
+        font = "Roboto-Regular.ttf"
+        label = "Pressed!" if state else f"Key {key}"
 
     return {
         "name": name,
@@ -159,9 +162,9 @@ def key_change_callback(deck, key, state):
         with deck:
             deck.reset()  # Reset deck, clearing all button images.
             deck.close()  # Close deck handle, terminating internal worker threads.
-    elif key_pressed:
+    elif key_pressed and key in KEY_COMBS:  # Only try to use the hotkey if it's actually defined.
         # key_style = get_key_style(deck, key, key_pressed)  # Probably unnecessary
-        print(KEY_COMBS[key][1][0], KEY_COMBS[key][1][1], KEY_COMBS[key][1][2], KEY_COMBS[key][1][3])
+        # print(KEY_COMBS[key][1][0], KEY_COMBS[key][1][1], KEY_COMBS[key][1][2], KEY_COMBS[key][1][3])
         pyautogui.hotkey(KEY_COMBS[key][1][0], KEY_COMBS[key][1][1], KEY_COMBS[key][1][2], KEY_COMBS[key][1][3])
 
 
