@@ -42,6 +42,11 @@ if not exists(f"{ASSETS_PATH}/Roboto-Regular.ttf"):
     print("Done.")
 
 
+# Key icons will be expected in the "./Assets" directory and
+# should be named {key}_p.png or {key}_r.png, 
+# with {key} corresponding to the key_number on the StreamDeck (e.g. 0 - 31).
+
+
 KEY_COMBS = {
     0: ("f13", ("f13", "", "", "")),
     1: ("f14", ("f14", "", "", "")),
@@ -129,7 +134,10 @@ def get_key_style(deck, key, state):
 
     elif key in KEY_COMBS:
         name = KEY_COMBS[key][0]
-        icon = "Pressed.png" if state else "Released.png"
+        icon_pressed = "Pressed.png" if not exists(f"{ASSETS_PATH}/{key}_p.png") else f"{key}_p.png"
+        icon_released = "Released.png" if not exists(f"{ASSETS_PATH}/{key}_r.png") else f"{key}_r.png"
+        icon = icon_pressed if state else icon_released
+        # icon = "Pressed.png" if state else "Released.png"
         font = "Roboto-Regular.ttf"
         label = "Pressed!" if state else KEY_COMBS[key][0]
 
