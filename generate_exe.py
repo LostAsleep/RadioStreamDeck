@@ -28,5 +28,6 @@ PyInstaller.__main__.run([
     '--add-binary=hidapi.pdb;.',
     '--add-data=README.md;.',
     '--add-data=Assets;Assets',
+    '--add-data=Font;Font',
     # '--noconsole'  # For final version
 ])
