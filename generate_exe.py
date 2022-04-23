@@ -22,7 +22,7 @@ import PyInstaller.__main__
 PyInstaller.__main__.run([
     'main.py',
     '--clean',
-    '--onefile',
+    # '--onefile',
     '--add-binary=hidapi.dll;.',
     '--add-binary=hidapi.lib;.',
     '--add-binary=hidapi.pdb;.',
