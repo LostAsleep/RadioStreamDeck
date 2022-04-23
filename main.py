@@ -13,8 +13,13 @@ from StreamDeck.ImageHelpers import PILHelper
 from os.path import exists
 
 
-# Folder location of image assets.
+# Folder location of assets. Create directory if it does not exist.
 ASSETS_PATH = os.path.join(os.path.dirname(__file__), "Assets")
+
+if not exists(ASSETS_PATH):
+    print("Assets directory not found. Trying to create it...")
+    os.makedirs(ASSETS_PATH)
+    print("Done.")
 
 
 DEFAULT_IMG = {
@@ -44,7 +49,8 @@ if not exists(f"{ASSETS_PATH}/Roboto-Regular.ttf"):
 
 # Key icons will be expected in the "./Assets" directory and
 # should be named {key}_p.png or {key}_r.png, 
-# with {key} corresponding to the key_number on the StreamDeck (e.g. 0 - 31).
+# with {key} corresponding to the key_number on the StreamDeck
+# (e.g. 0 - 31 for the StreamDeck XL).
 
 
 KEY_COMBS = {
